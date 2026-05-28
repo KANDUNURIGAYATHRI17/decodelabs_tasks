@@ -108,7 +108,7 @@ database using SELECT, WHERE, GROUP BY, HAVING, ORDER BY, and aggregations.
 
 ## 📬 Connect With Me
 
-Feel free to connect on [LinkedIn](your-linkedin-url-here) 🤝
+Feel free to connect on [LinkedIn](https://www.linkedin.com/in/kandunuri-gayathri-28a636342?utm_source=share_via&utm_content=profile&utm_medium=member_android) 🤝
 
 ---
 *Industrial Training Kit | Batch 2026 | Powered by DecodeLabs*
