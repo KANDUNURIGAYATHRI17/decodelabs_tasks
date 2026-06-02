@@ -23,7 +23,7 @@ interactive dashboards.
 | [Project 1](./decodelabs_task%201(Project1)) | Data Cleaning & Preparation | Excel, Python, Pandas | ✅ Completed |
 | [Project 2](./decodelabs_task%202(Project2)) | Exploratory Data Analysis (EDA) | Statistics, EDA, Visualization | ✅ Completed |
 | [Project 3](./decodelabs_task%203(Project3)) | SQL Data Analysis | SQL, SQLite, Aggregations | ✅ Completed |
-| [Project 4](./decodelabs_task%204(Project4)) | Data Visualization | Power BI, Charts, Dashboards | ✅ Completed |
+| [Project 4](./decodelabs_task%204(Project4)) | Data Visualization | Power BI, DAX, Dashboards | ✅ Completed |
 
 ---
 
@@ -118,38 +118,133 @@ database using SELECT, WHERE, GROUP BY, HAVING, ORDER BY, and aggregations.
 
 📂 **Folder:** [decodelabs_task 4(Project4)](./decodelabs_task%204(Project4))
 
-**Goal:** Create interactive visualizations and a Power BI dashboard to
-communicate data insights clearly to stakeholders.
+**Goal:** Transform cleaned e-commerce data into an executive-level interactive
+Power BI dashboard tracking **$1.26M in revenue** across 1,200 transactions
+(Jan 2023 – Jun 2025) — uncovering operational inefficiencies and systemic
+revenue leakage in order fulfillment.
 
-### Visualizations Built
+> 💡 **What is Data Visualization?**
+> Data Visualization is the process of representing raw numbers as charts,
+> graphs, and dashboards so that patterns, trends, and outliers become
+> instantly visible to decision-makers. Instead of reading rows of data,
+> stakeholders can *see* the story the data is telling — in seconds.
+> The goal is not just to make things look good, but to make insights
+> **undeniable and actionable**.
 
-| # | Chart Title | Chart Type | Business Question |
-|---|-------------|------------|-------------------|
+---
+
+### Dashboard Preview
+![Dashboard Preview](./decodelabs_task%204(Project4)/project4_data_visualization.jpeg)
+
+---
+
+### 📋 Executive Summary (SCQA Framework)
+
+> The **SCQA (Situation → Complication → Question → Answer)** framework
+> ensures decision-makers immediately understand the business context,
+> the core problem, and the recommended action — without reading a report.
+
+| | |
+|---|---|
+| **Situation** | $1.26M gross revenue generated across 7 product categories and 5 acquisition channels over a multi-year period |
+| **Complication** | Only **19.3%** of orders reach "Delivered" status — **20.8%** are Cancelled, leaking significant revenue out of the pipeline |
+| **Resolution** | Overhaul fulfillment for **Chair** (top revenue driver with 25% cancellation rate) + investigate **Google** and **Email** channel quality |
+
+---
+
+### 🛠️ Tech Stack
+
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| Data Source | Excel (.xlsx) | 1,200-row cleaned e-commerce dataset |
+| Transformation | Power Query (M Language) | Schema validation, data type enforcement |
+| Analytics | Microsoft Power BI Desktop | Dashboard building and interactivity |
+| Measures | DAX (Data Analysis Expressions) | KPI calculations and conditional logic |
+| Charts (Python) | Matplotlib & Seaborn | 10 static charts for Excel report |
+
+---
+
+### 📐 DAX Measures Written
+
+> **DAX (Data Analysis Expressions)** is Power BI's formula language —
+> used to create calculated KPIs, percentages, and conditional metrics
+> that update dynamically as users filter the dashboard.
+
+```DAX
+-- 1. Total Revenue — sums all transaction values
+Total Revenue = SUM('Sheet1'[TotalPrice])
+
+-- 2. Total Orders — counts every row in the dataset
+Total Orders = COUNTROWS('Sheet1')
+
+-- 3. Delivered Rate — % of orders successfully fulfilled
+Delivered Rate =
+DIVIDE(
+    CALCULATE([Total Orders], 'Sheet1'[OrderStatus] = "Delivered"),
+    [Total Orders], 0
+)
+
+-- 4. Cancellation Rate — % of orders that were cancelled
+Cancellation Rate =
+DIVIDE(
+    CALCULATE([Total Orders], 'Sheet1'[OrderStatus] = "Cancelled"),
+    [Total Orders], 0
+)
+
+-- 5. Average Order Value — mean spend per transaction
+Average Order Value = AVERAGE('Sheet1'[TotalPrice])
+```
+
+---
+
+### 🎨 Visualizations Built
+
+#### Power BI Dashboard Visuals
+
+| # | Visual | Chart Type | Why This Chart? |
+|---|--------|------------|-----------------|
+| 1 | KPI Summary Cards | Card (New) — 1×4 grid | Gives leadership instant top-line numbers at a glance |
+| 2 | Revenue by Product | Clustered Bar | Compares categories side-by-side; highlights Chair in red as risk |
+| 3 | Monthly Revenue Trend | Line Chart | Shows seasonality and growth trajectory over time |
+| 4 | Revenue by Channel | Clustered Column | Compares acquisition channel quality visually |
+| 5 | Payment × Status Matrix | Conditional Table | Cross-references payment method with order outcome |
+
+#### Python Charts (Matplotlib & Seaborn)
+
+| # | Chart Title | Chart Type | Business Question Answered |
+|---|-------------|------------|---------------------------|
 | C1 | Revenue by Product Category | Horizontal Bar | Which product generates the most revenue? |
 | C2 | Order Status Distribution | Donut Chart | What % of orders are delivered vs lost? |
-| C3 | Monthly Revenue Trend | Line Chart | How does revenue trend month by month? |
+| C3 | Monthly Revenue Trend | Line + Area | How does revenue trend month by month? |
 | C4 | Revenue by Marketing Channel | Bar Chart | Which referral source drives most revenue? |
 | C5 | Avg Order Value by Payment | Bar + Reference Line | Which payment method has highest avg order? |
-| C6 | Order Value Distribution | Histogram | Is order value normally distributed? |
+| C6 | Order Value Distribution | Histogram | Is order value normally distributed or skewed? |
 | C7 | Orders & Revenue by Quantity | Dual-Axis Bar | How does bulk ordering affect revenue? |
 | C8 | Coupon Code Performance | Side-by-Side Bar | Which coupon drives the most revenue? |
-| C9 | Correlation Heatmap | Heatmap | Which variables are most strongly correlated? |
-| C10 | Order Status by Product | Stacked Bar | Which products have worst cancellation rate? |
+| C9 | Correlation Heatmap | Seaborn Heatmap | Which numeric variables are most strongly linked? |
+| C10 | Order Status by Product | Stacked Bar | Which products have the worst cancellation rate? |
 
-### Key Visual Insights
-- 📌 **C2 + C10:** Only 19.3% Delivered — 41.4% are Cancelled or Returned
-- 📌 **C3:** Revenue peaked at **$68,069 in June 2024** — lowest was April 2023 ($27,752)
-- 📌 **C4:** Instagram leads all channels at **$275,285** total revenue
-- 📌 **C6:** Order value is **right-skewed** — median ($823) better than mean ($1,054)
-- 📌 **C9:** UnitPrice↔TotalPrice: **r = 0.717** — price is the #1 revenue driver
-- 📌 **C7:** Qty=5 orders average **$1,751** — 5× more than Qty=1 orders ($352)
+---
 
-### Files in This Folder
+### 🔑 Key Visual Insights Uncovered
+
+- 🚨 **Chair Fulfillment Crisis** — Leads in revenue but carries a **25% cancellation rate** — capital leaking directly from the supply chain
+- ⚠️ **Google & Email Risk** — High order volume but **worst post-purchase retention** — ad spend quality needs investigation
+- ✅ **Instagram Quality** — Brings highly qualified buyers with **near-zero cancellation rates** — increase ad spend here
+- 📉 **Only 19.3% Delivered** — Systemic fulfillment failure across all categories — urgent operational overhaul needed
+- 📊 **Right-Skewed Revenue** — Median ($823) is the better performance benchmark vs Mean ($1,054)
+- 💡 **Qty=5 orders earn 5× more** — Bundle promotions targeting Qty=2/3 buyers could significantly lift revenue
+
+---
+
+### 📁 Files in This Folder
+
 | File | Description |
 |------|-------------|
-| `project4_data_visualization.pbix` | Power BI interactive dashboard |
-| `project4_visualization.py` | Python source code (10 charts using matplotlib & seaborn) |
-| `DecodeLabs_Visualization_Report_P4.xlsx` | Excel report with all 10 charts embedded |
+| `project4_data_visualization.pbix` | Power BI interactive dashboard (main deliverable) |
+| `project4_data_visualization.jpeg` | Dashboard screenshot preview |
+| `project4_visualization.py` | Python source code — 10 charts using matplotlib & seaborn |
+| `DecodeLabs_Visualization_Report_P4.xlsx` | Excel report with all 10 charts embedded + data tables |
 
 ---
 
